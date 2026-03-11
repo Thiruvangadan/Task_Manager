@@ -10,8 +10,12 @@ const noteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    noteDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Note = mongoose.model("Note", noteSchema);

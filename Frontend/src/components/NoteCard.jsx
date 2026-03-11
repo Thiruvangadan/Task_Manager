@@ -20,6 +20,9 @@ const NoteCard = ({ note, setNotes }) => {
     }
   };
 
+  const created = new Date(note.createdAt);
+  const updated = new Date(note.updatedAt);
+
   return (
     <Link
       to={`/note/${note._id}`}
@@ -31,8 +34,13 @@ const NoteCard = ({ note, setNotes }) => {
         <p className="text-base-content/70 line-clamp-3">{note.content}</p>
         <div className="card-actions justify-between items-center mt-4">
           <span className="text-sm text-base-content/60">
-            {formatDate(new Date(note.createdAt))}
+            Created • {formatDate(new Date(created))}
           </span>
+          {created.getTime() !== updated.getTime() && (
+            <p className="text-sm text-gray-400">
+              Edited • {formatDate(new Date(updated))}
+            </p>
+          )}
           <div className="flex items-center gap-1">
             <PenSquareIcon className="size-4" />
             <button

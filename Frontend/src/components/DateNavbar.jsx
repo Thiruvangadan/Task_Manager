@@ -2,12 +2,13 @@ import React from "react";
 
 const DateNavbar = ({ selectDate, setSelectDate }) => {
   return (
-    <div className="navbar bg-base-100 shadow-sm">
-      <ul className="menu menu-horizontal px-1">
-        {console.log(selectDate)}
+    <div className="mt-6 navbar bg-slate-800/60  shadow-sm max-w-xl mx-auto rounded-full">
+      <ul className="menu menu-horizontal p-1 gap-3 justify-center w-full">
         <li>
           <button
-            className={selectDate === "yesterday" ? "bg-white text-black" : ""}
+            className={`px-4 py-2 rounded-full transition-all duration-200 ${
+              selectDate === "yesterday" ? "bg-white text-black" : ""
+            }`}
             onClick={() => setSelectDate("yesterday")}
           >
             Yesterday
@@ -15,7 +16,9 @@ const DateNavbar = ({ selectDate, setSelectDate }) => {
         </li>
         <li>
           <button
-            className={selectDate === "today" ? "bg-white text-black" : ""}
+            className={`px-4 py-2 rounded-full transition-all duration-200 ${
+              selectDate === "today" ? "bg-white text-black" : ""
+            }`}
             onClick={() => setSelectDate("today")}
           >
             Today
@@ -23,7 +26,9 @@ const DateNavbar = ({ selectDate, setSelectDate }) => {
         </li>
         <li>
           <button
-            className={selectDate === "tomorrow" ? "bg-white text-black" : ""}
+            className={`px-4 py-2 rounded-full transition-all duration-200 ${
+              selectDate === "tomorrow" ? "bg-white text-black" : ""
+            }`}
             onClick={() => setSelectDate("tomorrow")}
           >
             Tomorrow

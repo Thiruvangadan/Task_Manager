@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
+import { findDate } from "../lib/utils";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectDate = location.state?.selectDate || "today";
+  const noteDate = findDate(selectDate);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +25,7 @@ const CreatePage = () => {
       await api.post("/notes", {
         title,
         content,
+        noteDate,
       });
       toast.success("Note created successfully");
       navigate("/");

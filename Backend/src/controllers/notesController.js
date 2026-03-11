@@ -22,8 +22,8 @@ export async function getNotesById(req, res) {
 
 export async function createNotes(req, res) {
   try {
-    const { title, content } = req.body;
-    const note = new Note({ title, content });
+    const { title, content, noteDate } = req.body;
+    const note = new Note({ title, content, noteDate });
     const newNote = await note.save();
     res.status(201).json(newNote);
   } catch (error) {
@@ -41,7 +41,7 @@ export async function updateNotes(req, res) {
         title,
         content,
       },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedNote)
