@@ -41,7 +41,7 @@ export async function updateNotes(req, res) {
         title,
         content,
       },
-      { new: true },
+      { returnDocument: "after" },
     );
 
     if (!updatedNote)
