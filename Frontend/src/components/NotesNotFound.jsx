@@ -1,7 +1,11 @@
 import { NotebookIcon } from "lucide-react";
-import { Link } from "react-router";
+import useNotePermissions from "../hooks/useNotePermissions";
+import { useNavigate } from "react-router";
 
 const NotesNotFound = ({ selectDate }) => {
+  const { canCreate } = useNotePermissions();
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col items-center justify-center py-16 space-y-6 max-w-md mx-auto text-center">
       <div className="bg-primary/10 rounded-full p-8">
@@ -12,9 +16,17 @@ const NotesNotFound = ({ selectDate }) => {
         Ready to organize your thoughts? Create your first note to get started
         on your journey.
       </p>
-      <Link to="/create" state={{ selectDate }} className="btn btn-primary">
+
+      <button
+        className="btn btn-primary"
+        onClick={() => {
+          if (canCreate(selectDate)) {
+            navigate("/create", { state: { selectDate } });
+          }
+        }}
+      >
         Create Your First Note
-      </Link>
+      </button>
     </div>
   );
 };

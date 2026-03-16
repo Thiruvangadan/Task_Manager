@@ -58,12 +58,12 @@ const CreatePage = () => {
               <form onSubmit={handleSubmit}>
                 <div className="form-control mb-4">
                   <label className="label">
-                    <span className="label-text">Title</span>
+                    <span className="label-text mb-0.5">Title</span>
                   </label>
                   <input
                     type="text"
                     placeholder="Note Title"
-                    className="input input-bordered w-full"
+                    className="input input-bordered w-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -71,11 +71,11 @@ const CreatePage = () => {
 
                 <div className="form-control mb-4">
                   <label className="label">
-                    <span className="label-text">Content</span>
+                    <span className="label-text mb-0.5">Content</span>
                   </label>
                   <textarea
                     placeholder="Write your note here..."
-                    className="textarea textarea-bordered h-32 w-full"
+                    className="textarea textarea-bordered h-32 w-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />

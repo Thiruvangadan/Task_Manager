@@ -1,4 +1,4 @@
-export function formatDate(date) {
+export const formatDate = (date) => {
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -6,18 +6,27 @@ export function formatDate(date) {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
+};
 
-export function findDate(selectedDate) {
-  const activeDate = new Date();
+export const getActualDate = (offset = 0) => {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + offset);
+  return date;
+};
 
-  if (selectedDate === "yesterday") {
-    activeDate.setDate(activeDate.getDate() - 1);
-  }
+export const findDate = (selectedDate) => {
+  const activeDate = {
+    today: 0,
+    yesterday: -1,
+    tomorrow: 1,
+  };
 
-  if (selectedDate === "tomorrow") {
-    activeDate.setDate(activeDate.getDate() + 1);
-  }
+  return getActualDate(activeDate[selectedDate] ?? 0);
+};
 
-  return activeDate;
-}
+export const isPastDate = (date) => {
+  const today = new Date().setHours(0, 0, 0, 0);
+  const checkDate = findDate(date).setHours(0, 0, 0, 0);
+  return checkDate < today;
+};
