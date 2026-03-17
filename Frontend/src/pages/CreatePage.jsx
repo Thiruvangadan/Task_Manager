@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import toast from "react-hot-toast";
-import api from "../lib/axios";
 import { findDate } from "../lib/utils";
+import { createNote } from "../services/noteServices";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
@@ -22,11 +22,7 @@ const CreatePage = () => {
     }
     setLoading(true);
     try {
-      await api.post("/notes", {
-        title,
-        content,
-        noteDate,
-      });
+      createNote(title, content, noteDate);
       toast.success("Note created successfully");
       navigate("/");
     } catch (error) {

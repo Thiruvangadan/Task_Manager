@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { ArrowLeftIcon, Trash2Icon, LoaderIcon } from "lucide-react";
 import toast from "react-hot-toast";
-import api from "../lib/axios";
 import RateLimited from "../components/RateLimited";
+import {
+  deleteNote,
+  getNoteById,
+  updateNoteById,
+} from "../services/noteServices";
 
 const NoteDetail = () => {
   const [note, setNote] = useState(null);
@@ -18,8 +22,8 @@ const NoteDetail = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/notes/${id}`);
-        setNote(res.data);
+        const data = await getNoteById(id);
+        setNote(data);
         setIsRateLimited(false);
       } catch (error) {
         console.log("Error in fetching the note", error);
@@ -48,7 +52,7 @@ const NoteDetail = () => {
     try {
       if (!window.confirm("Are you sure you want to delete this note?")) return;
 
-      await api.delete(`/notes/${id}`);
+      await deleteNote(id);
       toast.success("Note deleted successfully");
       navigate("/");
     } catch (error) {
@@ -64,8 +68,7 @@ const NoteDetail = () => {
     }
     setSaving(true);
     try {
-      await api.put(`/notes/${id}`, note);
-
+      await updateNoteById(id, note);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {

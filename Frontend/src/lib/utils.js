@@ -27,6 +27,31 @@ export const findDate = (selectedDate) => {
 
 export const isPastDate = (date) => {
   const today = new Date().setHours(0, 0, 0, 0);
-  const checkDate = findDate(date).setHours(0, 0, 0, 0);
+  const checkDate =
+    typeof date === "object"
+      ? date.setHours(0, 0, 0, 0)
+      : findDate(date).setHours(0, 0, 0, 0);
   return checkDate < today;
+};
+
+export const filterNotes = (notes, search, selectDate) => {
+  if (search?.trim()) {
+    const query = search.toLowerCase();
+
+    return notes.filter(
+      (note) =>
+        note.title.toLowerCase().includes(query) ||
+        note.content.toLowerCase().includes(query),
+    );
+  }
+
+  if (selectDate === "all") {
+    return notes;
+  }
+
+  return notes.filter(
+    (note) =>
+      new Date(note.noteDate).toDateString() ===
+      findDate(selectDate).toDateString(),
+  );
 };

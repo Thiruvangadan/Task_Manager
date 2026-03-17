@@ -1,4 +1,3 @@
-import React from "react";
 import { DATE_FILTERS } from "../constants/dates";
 
 const DateNavbar = ({ selectDate, setSelectDate, searchNote }) => {
