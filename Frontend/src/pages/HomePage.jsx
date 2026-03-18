@@ -9,11 +9,18 @@ import NoteSearch from "../components/NoteSearch";
 import useDebounce from "../hooks/useDebounce";
 import SearchNotFound from "../components/SearchNotFound";
 import useNotes from "../hooks/useNotes";
+import { useSearchParams } from "react-router";
 
 const HomePage = () => {
   const { notes, setNotes, loading, isRateLimited } = useNotes();
-  const [selectDate, setSelectDate] = useState("today");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectDate = searchParams.get("date") || "today";
   const [searchNote, setSearchNote] = useState("");
+
+  const handleDateChange = (date) => {
+    setSearchParams({ date });
+  };
+
   const debouncedSearch = useDebounce(searchNote, 500);
 
   const filteredNotes = filterNotes(notes, debouncedSearch, selectDate);
@@ -24,7 +31,7 @@ const HomePage = () => {
       <NoteSearch searchNote={searchNote} setSearchNote={setSearchNote} />
       <DateNavbar
         selectDate={selectDate}
-        setSelectDate={setSelectDate}
+        setSelectDate={handleDateChange}
         searchNote={searchNote}
       />
       {isRateLimited && <RateLimited />}
