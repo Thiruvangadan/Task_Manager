@@ -1,5 +1,5 @@
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { formatDate } from "../lib/utils";
 import toast from "react-hot-toast";
 import useNotePermissions from "../hooks/useNotePermissions";
@@ -10,6 +10,8 @@ const NoteCard = ({ note, setNotes }) => {
   const { canEdit } = useNotePermissions();
   const created = new Date(note.createdAt);
   const updated = new Date(note.updatedAt);
+  const noteDate = new Date(note.noteDate);
+  const [searchParams] = useSearchParams();
 
   const handleDelete = async (e, id) => {
     e.stopPropagation();
@@ -28,8 +30,8 @@ const NoteCard = ({ note, setNotes }) => {
   };
 
   const handleNoteClick = () => {
-    if (canEdit(created)) {
-      navigate(`/note/${note._id}`);
+    if (canEdit(noteDate)) {
+      navigate(`/note/${note._id}?${searchParams.toString()}`);
     }
     return;
   };

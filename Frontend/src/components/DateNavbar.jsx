@@ -8,7 +8,8 @@ const DateNavbar = ({ selectDate, setSelectDate, searchNote }) => {
         <button
           key={date.value}
           className={`px-4 py-2 rounded-full transition-all duration-500  ${
-            !isSearching && selectDate === date.value
+            (isSearching && date.value === "all") ||
+            (!isSearching && selectDate === date.value)
               ? "bg-white text-black "
               : "hover:bg-white/10 cursor-pointer"
           }`}

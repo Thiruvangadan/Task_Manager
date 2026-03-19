@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { ArrowLeftIcon, Trash2Icon, LoaderIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import RateLimited from "../components/RateLimited";
@@ -14,6 +14,7 @@ const NoteDetail = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
@@ -54,7 +55,7 @@ const NoteDetail = () => {
 
       await deleteNote(id);
       toast.success("Note deleted successfully");
-      navigate("/");
+      navigate(`/?${searchParams.toString()}`);
     } catch (error) {
       console.log("Failed to delete the note", error);
       toast.error("Failed to delete");
@@ -70,7 +71,7 @@ const NoteDetail = () => {
     try {
       await updateNoteById(id, note);
       toast.success("Note updated successfully");
-      navigate("/");
+      navigate(`/?${searchParams.toString()}`);
     } catch (error) {
       console.log("Error to save the note ", error);
       toast.error("Failed to update the note");
@@ -86,7 +87,7 @@ const NoteDetail = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <Link to="/" className="btn btn-ghost">
+            <Link to={`/?${searchParams.toString()}`} className="btn btn-ghost">
               <ArrowLeftIcon className="h-5 w-5" />
               Back to Notes
             </Link>

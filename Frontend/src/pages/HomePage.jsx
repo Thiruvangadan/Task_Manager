@@ -16,6 +16,7 @@ const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectDate = searchParams.get("date") || "today";
   const [searchNote, setSearchNote] = useState("");
+  const effectiveDate = searchNote ? "all" : selectDate;
 
   const handleDateChange = (date) => {
     setSearchParams({ date });
@@ -23,14 +24,14 @@ const HomePage = () => {
 
   const debouncedSearch = useDebounce(searchNote, 500);
 
-  const filteredNotes = filterNotes(notes, debouncedSearch, selectDate);
+  const filteredNotes = filterNotes(notes, debouncedSearch, effectiveDate);
 
   return (
     <div className="min-h-screen">
-      <Navbar selectDate={selectDate} />
+      <Navbar selectDate={effectiveDate} />
       <NoteSearch searchNote={searchNote} setSearchNote={setSearchNote} />
       <DateNavbar
-        selectDate={selectDate}
+        selectDate={effectiveDate}
         setSelectDate={handleDateChange}
         searchNote={searchNote}
       />

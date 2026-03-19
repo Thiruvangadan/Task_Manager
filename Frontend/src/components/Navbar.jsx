@@ -1,9 +1,11 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { PlusIcon } from "lucide-react";
 import useNotePermissions from "../hooks/useNotePermissions";
 
 const Navbar = ({ selectDate }) => {
   const { canCreate } = useNotePermissions();
+  const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
   return (
     <header className="bg-base-300 border-b border-base-content/10">
@@ -17,7 +19,7 @@ const Navbar = ({ selectDate }) => {
               className="btn btn-primary"
               onClick={() => {
                 if (canCreate(selectDate)) {
-                  navigate("/create", { state: { selectDate } });
+                  navigate(`/create?${searchParams.toString()}`);
                 }
               }}
             >

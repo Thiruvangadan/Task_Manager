@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { findDate } from "../lib/utils";
@@ -10,8 +10,8 @@ const CreatePage = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const selectDate = location.state?.selectDate || "today";
+  const [searchParams] = useSearchParams();
+  const selectDate = searchParams.get("date") || "today";
   const noteDate = findDate(selectDate);
 
   const handleSubmit = async (e) => {
@@ -22,9 +22,9 @@ const CreatePage = () => {
     }
     setLoading(true);
     try {
-      createNote(title, content, noteDate);
+      await createNote(title, content, noteDate);
       toast.success("Note created successfully");
-      navigate("/");
+      navigate(`/?${searchParams.toString()}`);
     } catch (error) {
       console.log("Error creating note", error);
       if (error.response.status === 429) {
@@ -43,7 +43,10 @@ const CreatePage = () => {
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <Link to={"/"} className="btn btn-ghost mb-6">
+          <Link
+            to={`/?${searchParams.toString()}`}
+            className="btn btn-ghost mb-6"
+          >
             <ArrowLeftIcon className="size-5" />
             Back to Notes
           </Link>
