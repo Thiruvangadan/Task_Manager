@@ -39,8 +39,7 @@ const NoteCard = ({ note, setNotes }) => {
   return (
     <div
       onClick={handleNoteClick}
-      className="card bg-base-100 hover:shadow-lg transition-all duration-200 
-      border-t-4 border-solid border-[#00FF9D] cursor-pointer"
+      className="card bg-base-100 border-t-4 border-[#00FF9D] cursor-pointer transition-all duration-200 ease-out hover:scale-102 hover:shadow-xl hover:-translate-y-1"
     >
       <div className="card-body">
         <h3 className="card-title text-base-content">{note.title}</h3>

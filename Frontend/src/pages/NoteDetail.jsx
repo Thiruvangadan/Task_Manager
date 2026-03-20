@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { ArrowLeftIcon, Trash2Icon, LoaderIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -15,8 +15,8 @@ const NoteDetail = () => {
   const [saving, setSaving] = useState(false);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [searchParams] = useSearchParams();
-
   const navigate = useNavigate();
+  const contentRef = useRef(null);
 
   const { id } = useParams();
 
@@ -99,8 +99,30 @@ const NoteDetail = () => {
               Delete Note
             </button>
           </div>
-          <div className="card bg-base-100">
+          <div
+            className="card bg-base-100"
+            onKeyDown={(e) => {
+              if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                e.preventDefault();
+                handleSave();
+              }
+            }}
+          >
             <div className="card-body">
+              <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text mb-0.5">Date</span>
+                </label>
+                <input
+                  disabled
+                  className="input input-bordered w-full rounded-2xl"
+                  value={new Date(note.noteDate).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                />
+              </div>
               <div className="form-control mb-4">
                 <label className="label">
                   <span className="label-text mb-0.5">Title</span>
@@ -108,9 +130,21 @@ const NoteDetail = () => {
                 <input
                   type="text"
                   placeholder="Note title"
+                  autoFocus
                   className="input input-bordered w-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                   value={note.title}
                   onChange={(e) => setNote({ ...note, title: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && note.title.trim()) {
+                      e.preventDefault();
+                      if (contentRef.current) {
+                        contentRef.current.focus();
+
+                        const length = contentRef.current.value.length;
+                        contentRef.current.setSelectionRange(length, length);
+                      }
+                    }
+                  }}
                 />
               </div>
 
@@ -119,6 +153,7 @@ const NoteDetail = () => {
                   <span className="label-text mb-0.5">Content</span>
                 </label>
                 <textarea
+                  ref={contentRef}
                   placeholder="Write your note here..."
                   className="textarea textarea-bordered h-32 w-full rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary"
                   value={note.content}
@@ -128,6 +163,12 @@ const NoteDetail = () => {
                 />
               </div>
               <div className="card-actions justify-end">
+                <span className="text-xs text-base-content/50 hover:text-base-content transition">
+                  <kbd className="kbd kbd-xs">Ctrl</kbd>
+                  <span className="mx-1">/</span>
+                  <kbd className="kbd kbd-xs">⌘</kbd> +{" "}
+                  <kbd className="kbd kbd-xs">Enter</kbd> to save
+                </span>
                 <button
                   className="btn btn-primary"
                   disabled={saving}

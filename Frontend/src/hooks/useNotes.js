@@ -13,7 +13,7 @@ const useNotes = () => {
         setNotes(data);
         setIsRateLimited(false);
       } catch (error) {
-        console.log("Error while fetching notes");
+        // console.log("Error while fetching notes");
         if (error.response?.status === 429) {
           setIsRateLimited(true);
         } else {

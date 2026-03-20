@@ -1,9 +1,11 @@
 import { NotebookIcon } from "lucide-react";
 import useNotePermissions from "../hooks/useNotePermissions";
+import { useSearchParams } from "react-router";
 import { useNavigate } from "react-router";
 
 const NotesNotFound = ({ selectDate }) => {
   const { canCreate } = useNotePermissions();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   return (
@@ -21,7 +23,7 @@ const NotesNotFound = ({ selectDate }) => {
         className="btn btn-primary"
         onClick={() => {
           if (canCreate(selectDate)) {
-            navigate("/create", { state: { selectDate } });
+            navigate(`/create?${searchParams.toString()}`);
           }
         }}
       >

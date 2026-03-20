@@ -4,7 +4,12 @@ import { useState } from "react";
 import NoteCard from "../components/NoteCard";
 import NotesNotFound from "../components/NotesNotFound";
 import DateNavbar from "../components/DateNavbar";
-import { filterNotes } from "../lib/utils";
+import {
+  filterNotes,
+  groupNotesByDate,
+  sortGroupedDates,
+  formatGroupDate,
+} from "../lib/utils";
 import NoteSearch from "../components/NoteSearch";
 import useDebounce from "../hooks/useDebounce";
 import SearchNotFound from "../components/SearchNotFound";
@@ -17,7 +22,6 @@ const HomePage = () => {
   const selectDate = searchParams.get("date") || "today";
   const [searchNote, setSearchNote] = useState("");
   const effectiveDate = searchNote ? "all" : selectDate;
-
   const handleDateChange = (date) => {
     setSearchParams({ date });
   };
@@ -25,6 +29,9 @@ const HomePage = () => {
   const debouncedSearch = useDebounce(searchNote, 500);
 
   const filteredNotes = filterNotes(notes, debouncedSearch, effectiveDate);
+
+  const grouped = groupNotesByDate(filteredNotes);
+  const sortedGroups = sortGroupedDates(grouped);
 
   return (
     <div className="min-h-screen">
@@ -49,18 +56,39 @@ const HomePage = () => {
 
         {searchNote && filteredNotes.length === 0 && <SearchNotFound />}
 
-        {filteredNotes.length > 0 && !isRateLimited && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredNotes.map((note) => (
-              <NoteCard
-                key={note._id}
-                note={note}
-                setNotes={setNotes}
-                selectDate={selectDate}
-              />
-            ))}
-          </div>
-        )}
+        {filteredNotes.length > 0 &&
+          !isRateLimited &&
+          (selectDate === "all" ? (
+            sortedGroups.map(([date, notes]) => (
+              <div key={date} className="mb-8">
+                <h2 className="text-lg font-semibold mb-2">
+                  {formatGroupDate(date)}
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {notes.map((note) => (
+                    <NoteCard
+                      key={note._id}
+                      note={note}
+                      setNotes={setNotes}
+                      selectDate={selectDate}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredNotes.map((note) => (
+                <NoteCard
+                  key={note._id}
+                  note={note}
+                  setNotes={setNotes}
+                  selectDate={selectDate}
+                />
+              ))}
+            </div>
+          ))}
       </div>
     </div>
   );

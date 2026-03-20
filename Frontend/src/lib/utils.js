@@ -8,6 +8,29 @@ export const formatDate = (date) => {
   });
 };
 
+export const formatGroupDate = (dateString) => {
+  const today = new Date();
+  const yesterday = new Date();
+
+  yesterday.setDate(today.getDate() - 1);
+
+  const date = new Date(dateString);
+
+  if (date.toDateString() === today.toDateString()) {
+    return "Today";
+  }
+
+  if (date.toDateString() === yesterday.toDateString()) {
+    return "Yesterday";
+  }
+
+  return date.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export const getActualDate = (offset = 0) => {
   const date = new Date();
   date.setHours(0, 0, 0, 0);
@@ -25,13 +48,20 @@ export const findDate = (selectedDate) => {
   return getActualDate(activeDate[selectedDate] ?? 0);
 };
 
+export const checkDate = (selectDate) => {
+  if (/^[a-z]+$/.test(selectDate)) {
+    return findDate(selectDate);
+  }
+  return selectDate;
+};
+
 export const isPastDate = (date) => {
   const today = new Date().setHours(0, 0, 0, 0);
-  const checkDate =
+  const convertDate =
     typeof date === "object"
       ? date.setHours(0, 0, 0, 0)
-      : findDate(date).setHours(0, 0, 0, 0);
-  return checkDate < today;
+      : new Date(checkDate(date)).setHours(0, 0, 0, 0);
+  return convertDate < today;
 };
 
 export const filterNotes = (notes, search, selectDate) => {
@@ -49,9 +79,37 @@ export const filterNotes = (notes, search, selectDate) => {
     return notes;
   }
 
+  if (!/^[a-z]+$/.test(selectDate)) {
+    return notes.filter(
+      (note) =>
+        new Date(note.noteDate).toDateString() ===
+        new Date(selectDate).toDateString(),
+    );
+  }
+
   return notes.filter(
     (note) =>
       new Date(note.noteDate).toDateString() ===
       findDate(selectDate).toDateString(),
+  );
+};
+
+export const groupNotesByDate = (notes) => {
+  return notes.reduce((acc, note) => {
+    const date = new Date(note.noteDate).toDateString();
+
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+
+    acc[date].push(note);
+
+    return acc;
+  }, {});
+};
+
+export const sortGroupedDates = (grouped) => {
+  return Object.entries(grouped).sort(
+    ([dateA], [dateB]) => new Date(dateB) - new Date(dateA),
   );
 };
