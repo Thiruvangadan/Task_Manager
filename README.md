@@ -92,6 +92,9 @@ Create a `.env` file in the backend:
 ```env id="y2k8op"
 MONGO_URI=your_database_url
 PORT=5000
+NODE_ENV=development
+UPSTASH_REDIS_REST_URL=upstash_redis_rest_url
+UPSTASH_REDIS_REST_TOKEN=upstash_redis_rest_token
 
 ```
 
