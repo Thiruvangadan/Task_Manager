@@ -72,7 +72,7 @@ A clean and minimal full-stack notes application designed to help users organize
 
 ```bash id="7j1s9f"
 # Clone the repo
-git clone <your-repo-link>
+git clone https://github.com/Thiruvangadan/Task_Manager.git
 
 # Install backend dependencies
 cd backend
